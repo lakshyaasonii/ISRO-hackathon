@@ -1,215 +1,277 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Upload, AlertTriangle, Lightbulb, BarChart3, ChevronRight, RefreshCw } from "lucide-react"
+import React, { useState } from "react";
 
 export default function Page() {
-  const [image, setImage] = useState<string | null>(null)
-  const [file, setFile] = useState<File | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [processedImage, setProcessedImage] = useState<string | null>(null)
-  const [report, setReport] = useState<string | null>(null)
-  const [chartsData, setChartsData] = useState<{ label: string; value: string }[]>([])
+  // 1. Saari States
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [processedImage, setProcessedImage] = useState<string | null>(null);
+  const [reportData, setReportData] = useState<{
+    land_cover: { concrete: number; green: number; water: number };
+    hotspots: string[];
+    charts_data: string[];
+    solutions: string[];
+  } | null>(null);
 
+  // 2. File Change Handler
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const selectedFile = e.target.files[0]
-      setFile(selectedFile)
-      setImage(URL.createObjectURL(selectedFile))
-      // Reset old states
-      setProcessedImage(null)
-      setReport(null)
-      setChartsData([])
+      setFile(e.target.files[0]);
     }
-  }
+  };
 
+  // 3. Main Analyze API Handler (Render URL + Route Path Ke Saath)
   const handleAnalyze = async () => {
-    if (!file) return
-    setLoading(true)
+    if (!file) return;
+    setLoading(true);
 
-    const formData = new FormData()
-    formData.append("file", file)
+    const formData = new FormData();
+    formData.append("file", file);
 
     try {
-      // 🚀 CONNECTING TO YOUR PYTHON FASTAPI BACKEND
+      // Tumhara live backend endpoint route path ke saath
       const response = await fetch("https://isro-hackathon-6h7q.onrender.com/analyze-heat", {
         method: "POST",
         body: formData,
-      })
+      });
 
-      if (!response.ok) throw new Error("Backend connection failed")
+      if (!response.ok) throw new Error("Backend connection failed");
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (data.success) {
-        setProcessedImage(data.processed_image)
-        parseReportData(data.report)
+        setProcessedImage(data.processed_image);
+        setReportData(data.report);
       }
     } catch (error) {
-      console.error("Error analyzing image:", error)
-      alert("Backend se connect nahi ho paya. Check karo ki uvicorn server chal raha hai ya nahi!")
+      console.error("Error analyzing image:", error);
+      alert("Backend se connect nahi ho paya. Check karo ki Render server chal raha hai ya nahi.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
-
-  // Helper function to extract text and charts dynamically from Gemini report
-  const parseReportData = (text: string) => {
-    setReport(text)
-    const charts: { label: string; value: string }[] = []
-    const lines = text.split("\n")
-    lines.forEach((line) => {
-      if (line.includes("Concrete Area:") || line.includes("Green Cover:") || line.includes("Water Bodies:")) {
-        const parts = line.replace("- ", "").split(":")
-        if (parts.length === 2) {
-          charts.push({ label: parts[0].trim(), value: parts[1].trim() })
-        }
-      }
-    })
-    setChartsData(charts)
-  }
+  };
 
   return (
-    <div className="flex min-h-screen bg-[#0B0F19] text-slate-100 font-sans">
-      {/* Sidebar */}
-      <div className="w-64 bg-[#111827] border-r border-slate-800 p-6 flex flex-col justify-between">
-        <div>
-          <div className="flex items-center gap-3 mb-8">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center font-bold text-white shadow-lg shadow-red-900/30">
-              ISRO
-            </div>
-            <div>
-              <h2 className="font-bold text-sm tracking-wide text-slate-200">ISRO Urban Heat</h2>
-              <p className="text-xs text-slate-500">Heat Mitigation Tool</p>
-            </div>
+    <div className="min-h-screen bg-[#0f172a] text-slate-100 flex flex-col md:flex-row">
+      
+      {/* ================= SIDEBAR (Laptop par dikhega, Mobile par hidden) ================= */}
+      <aside className="hidden md:block w-64 bg-[#1e293b] p-6 border-r border-slate-800 shrink-0">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center font-bold text-white">
+            I
           </div>
-          <nav className="space-y-1">
-            <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium bg-gradient-to-r from-red-600/20 to-amber-600/10 text-red-400 border border-red-500/20 transition-all">
-              <BarChart3 className="h-4 w-4" /> Dashboard
-            </button>
-          </nav>
+          <div>
+            <h1 className="font-bold text-sm tracking-wide">ISRO Urban Heat</h1>
+            <p className="text-xs text-slate-400">Heat Mitigation Tool</p>
+          </div>
         </div>
-        <div className="text-xs text-slate-600 text-center border-t border-slate-800/60 pt-4">
-          v1.0.0 • ISRO Heat AI
-        </div>
-      </div>
+        <nav className="space-y-2">
+          <button className="w-full flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-red-500/20 to-orange-500/10 text-orange-400 font-medium text-sm rounded-lg border border-orange-500/20">
+            📊 Dashboard
+          </button>
+        </nav>
+      </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto max-w-7xl mx-auto w-full">
-        <header className="mb-8">
-          <h1 className="text-3xl font-extrabold text-slate-100 tracking-tight bg-gradient-to-r from-slate-100 to-slate-400 bg-clip-text text-transparent">
+      {/* ================= MOBILE HEADER (Sirf Mobile screen par dikhega) ================= */}
+      <header className="block md:hidden bg-[#1e293b] p-4 border-b border-slate-800 flex items-center gap-3 sticky top-0 z-50">
+        <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center font-bold text-white text-xs">
+          I
+        </div>
+        <div>
+          <h1 className="font-bold text-sm">ISRO Urban Heat Tool</h1>
+        </div>
+      </header>
+
+      {/* ================= MAIN DASHBOARD CONTENT ================= */}
+      <main className="flex-1 p-4 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
+        
+        {/* Header Title Text */}
+        <div className="mb-6 md:mb-8 text-center md:text-left">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">
             Urban Heat Analysis Dashboard
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-slate-400 text-xs md:text-sm mt-1">
             Analyze satellite imagery to identify urban heat islands and generate mitigation strategies.
           </p>
-        </header>
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left: Upload Section */}
-          <div className="space-y-6">
-            <div className="bg-[#111827] border border-slate-800/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-              <h3 className="text-lg font-semibold text-slate-200 mb-4 flex items-center gap-2">
-                <Upload className="h-5 w-5 text-red-500" /> Upload Satellite Image
-              </h3>
+        {/* RESPONSIVE GRID LAYOUT: Mobile par 1 column, Laptop par 2 columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          
+          {/* LEFT SIDE: INPUT & VISUALIZATION */}
+          <div className="space-y-6 w-full">
+            
+            {/* CARD 1: Upload Satellite Image */}
+            <div className="bg-[#1e293b]/50 border border-slate-800 rounded-xl p-4 md:p-6 backdrop-blur-sm">
+              <h2 className="text-sm md:text-base font-semibold text-white mb-4 flex items-center gap-2">
+                📤 Upload Satellite Image
+              </h2>
               
-              <div className="border-2 border-dashed border-slate-800 hover:border-red-500/40 rounded-xl p-8 flex flex-col items-center justify-center gap-4 bg-[#0D1321] transition-all cursor-pointer relative group">
+              <div className="border-2 border-dashed border-slate-700 hover:border-orange-500/50 rounded-lg p-6 text-center transition-colors bg-[#0f172a]/50">
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
-                  className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                  className="hidden"
+                  id="satellite-upload"
                 />
-                {image ? (
-                  <img src={image} alt="Preview" className="max-h-60 rounded-lg object-cover shadow-md" />
-                ) : (
-                  <>
-                    <div className="h-12 w-12 rounded-full bg-slate-900 flex items-center justify-center text-slate-400 group-hover:scale-110 transition-transform">
-                      <Upload className="h-5 w-5" />
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm font-medium text-slate-300">Drag & drop your satellite image here</p>
-                      <p className="text-xs text-slate-500 mt-1">Supported formats: JPG, PNG, GeoTIFF</p>
-                    </div>
-                  </>
-                )}
+                <label htmlFor="satellite-upload" className="cursor-pointer block">
+                  {file ? (
+                    <p className="text-xs md:text-sm text-emerald-400 font-medium truncate">
+                      📄 {file.name}
+                    </p>
+                  ) : (
+                    <p className="text-xs md:text-sm text-slate-400">
+                      Drag & drop your satellite image here or <span className="text-orange-400 underline">Browse</span>
+                    </p>
+                  )}
+                </label>
               </div>
 
-              {file && (
-                <button
-                  onClick={handleAnalyze}
-                  disabled={loading}
-                  className="w-full mt-5 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-red-900/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50"
-                >
-                  {loading ? (
-                    <>
-                      <RefreshCw className="h-5 w-5 animate-spin" /> Processing AI Analysis...
-                    </>
-                  ) : (
-                    <>Analyze Heat Signature <ChevronRight className="h-4 w-4" /></>
-                  )}
-                </button>
-              )}
+              <button
+                onClick={handleAnalyze}
+                disabled={!file || loading}
+                className="w-full mt-4 bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 disabled:from-slate-800 disabled:to-slate-800 disabled:text-slate-500 text-white font-medium text-xs md:text-sm py-2.5 px-4 rounded-lg transition-all shadow-lg shadow-orange-950/20"
+              >
+                {loading ? "Analyzing Satellite Data..." : "Analyze Heat Signature ›"}
+              </button>
             </div>
 
-            {/* Processed Thermal Output */}
-            {processedImage && (
-              <div className="bg-[#111827] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
-                <h3 className="text-lg font-semibold text-slate-200 mb-4 flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-amber-500" /> AI Processed Thermal Map
-                </h3>
-                <div className="rounded-xl overflow-hidden bg-slate-950 p-2 border border-slate-800">
-                  <img src={processedImage} alt="Thermal Mapping" className="w-full object-cover rounded-lg" />
-                </div>
+            {/* CARD 2: Thermal Map Result */}
+            <div className="bg-[#1e293b]/50 border border-slate-800 rounded-xl p-4 md:p-6 backdrop-blur-sm">
+              <h2 className="text-sm md:text-base font-semibold text-white mb-4 flex items-center gap-2">
+                ⚠️ AI Processed Thermal Map
+              </h2>
+              <div className="aspect-video w-full bg-[#0f172a]/80 rounded-lg border border-slate-800 flex items-center justify-center overflow-hidden">
+                {processedImage ? (
+                  <img
+                    src={`data:image/jpeg;base64,${processedImage}`}
+                    alt="Thermal Analysis Map"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <p className="text-xs text-slate-500 px-4 text-center">
+                    Waiting for Satellite Image Upload & Process...
+                  </p>
+                )}
               </div>
-            )}
+            </div>
+
           </div>
 
-          {/* Right: AI Analysis Report */}
-          <div className="space-y-6">
-            {report ? (
-              <div className="bg-[#111827] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
-                <h3 className="text-lg font-semibold text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-3">
-                  <Lightbulb className="h-5 w-5 text-amber-400" /> ISRO AI Expert Assessment
-                </h3>
-                
-                {/* Dynamically generated charts if data exists */}
-                {chartsData.length > 0 && (
-                  <div className="space-y-3 bg-[#0D1321] p-4 rounded-xl border border-slate-800/60">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Land Cover Estimation</h4>
-                    {chartsData.map((chart, index) => (
-                      <div key={index} className="space-y-1">
-                        <div className="flex justify-between text-xs font-medium">
-                          <span className="text-slate-300">{chart.label}</span>
-                          <span className="text-amber-400 font-bold">{chart.value}</span>
-                        </div>
-                        <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-gradient-to-r from-red-500 to-amber-500 rounded-full" 
-                            style={{ width: chart.value.includes('%') ? chart.value : '50%' }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+          {/* RIGHT SIDE: AI ASSESSMENT REPORT */}
+          <div className="bg-[#1e293b]/50 border border-slate-800 rounded-xl p-4 md:p-6 backdrop-blur-sm w-full">
+            <h2 className="text-sm md:text-base font-semibold text-white mb-4 flex items-center gap-2">
+              💡 ISRO AI Expert Assessment
+            </h2>
 
-                {/* Main Text Report */}
-                <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-line bg-[#0D1321]/40 p-4 rounded-xl border border-slate-800/40 max-h-[500px] overflow-y-auto">
-                  {report}
+            {reportData ? (
+              <div className="space-y-6">
+                
+                {/* Progress Bars (Land Cover) */}
+                <div>
+                  <h3 className="text-xs font-bold text-slate-400 tracking-wider uppercase mb-3">
+                    Land Cover Estimation
+                  </h3>
+                  <div className="space-y-3">
+                    {/* Concrete Area */}
+                    <div>
+                      <div className="flex justify-between text-xs mb-1">
+                        <span className="text-slate-300">Concrete Area</span>
+                        <span className="text-orange-400 font-semibold">{reportData.land_cover.concrete}%</span>
+                      </div>
+                      <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div 
+                          className="bg-orange-500 h-full rounded-full transition-all duration-500"
+                          style={{ width: `${reportData.land_cover.concrete}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                    {/* Green Cover */}
+                    <div>
+                      <div className="flex justify-between text-xs mb-1">
+                        <span className="text-slate-300">Green Cover</span>
+                        <span className="text-emerald-400 font-semibold">{reportData.land_cover.green}%</span>
+                      </div>
+                      <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div 
+                          className="bg-emerald-500 h-full rounded-full transition-all duration-500"
+                          style={{ width: `${reportData.land_cover.green}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                    {/* Water Bodies */}
+                    <div>
+                      <div className="flex justify-between text-xs mb-1">
+                        <span className="text-slate-300">Water Bodies</span>
+                        <span className="text-blue-400 font-semibold">{reportData.land_cover.water}%</span>
+                      </div>
+                      <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div 
+                          className="bg-blue-500 h-full rounded-full transition-all duration-500"
+                          style={{ width: `${reportData.land_cover.water}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+
+                {/* Hotspots Detected */}
+                <div>
+                  <h3 className="text-xs font-bold text-slate-400 tracking-wider uppercase mb-2">
+                    Hotspots:
+                  </h3>
+                  <ul className="space-y-1.5">
+                    {reportData.hotspots.map((item, idx) => (
+                      <li key={idx} className="text-xs md:text-sm text-slate-300 flex items-start gap-2">
+                        <span className="text-red-500 mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Charts Data Breakdown */}
+                <div>
+                  <h3 className="text-xs font-bold text-slate-400 tracking-wider uppercase mb-2">
+                    Charts Data:
+                  </h3>
+                  <ul className="space-y-1.5">
+                    {reportData.charts_data.map((item, idx) => (
+                      <li key={idx} className="text-xs md:text-sm text-slate-300 flex items-start gap-2">
+                        <span className="text-orange-400 mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Solutions & Mitigation */}
+                <div>
+                  <h3 className="text-xs font-bold text-slate-400 tracking-wider uppercase mb-2">
+                    Solutions:
+                  </h3>
+                  <ul className="space-y-1.5">
+                    {reportData.solutions.map((item, idx) => (
+                      <li key={idx} className="text-xs md:text-sm text-slate-200 flex items-start gap-2 bg-[#0f172a]/40 p-2 rounded border border-slate-800">
+                        <span className="text-emerald-400 mt-0.5">✓</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
               </div>
             ) : (
-              <div className="bg-[#111827]/40 border border-dashed border-slate-800 rounded-2xl p-12 text-center flex flex-col items-center justify-center h-full min-h-[400px]">
-                <BarChart3 className="h-12 w-12 text-slate-700 mb-3" />
-                <p className="text-sm font-medium text-slate-400">Waiting for Satellite Image Upload</p>
-                <p className="text-xs text-slate-600 mt-1">Upload a patch to view thermal hotspots and metric splits.</p>
-              </div>
+              <p className="text-xs text-slate-500 text-center py-12">
+                Waiting for analysis report data breakdown...
+              </p>
             )}
           </div>
+
         </div>
       </main>
     </div>
-  )
+  );
 }
