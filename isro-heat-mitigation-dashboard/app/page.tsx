@@ -33,7 +33,7 @@ export default function Page() {
 
     try {
       // 🚀 CONNECTING TO YOUR PYTHON FASTAPI BACKEND
-      const response = await fetch("http://127.0.0.1:8000/analyze-heat", {
+      const response = await fetch("https://isro-hackathon-6h7q.onrender.com/analyze-heat", {
         method: "POST",
         body: formData,
       })
