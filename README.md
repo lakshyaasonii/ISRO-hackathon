@@ -46,4 +46,12 @@ Live Deployment Backend API: [Render Backend Link]
 └── backend/ (FastAPI Core Engine)
     ├── main.py              # Main API entry point, endpoints, & Pillow pipeline
     ├── requirements.txt     # Python deployment packages (FastAPI, Pillow, HTTPX)
-    └── runtime.txt          # Dedicated environment specification
+
+⚙️ Core Architecture & Data Workflow
+   -> Payload Transmission: The client frontend takes a high-resolution raw satellite frame and delivers it to the   backend via an asynchronous multi-part upload endpoint (/analyze-heat).
+
+   -> Color Classification: The backend opens the image stream using the Pillow library. It parses the binary arrays, runs pixel-level color categorization thresholds, and maps the exact distributions of concrete infrastructure versus green canopy.
+
+   -> Thermal Gradient Translation: Pillow overlays a localized pseudo-color spectrum filter to transform structural densities into an intuitive visual heat map returned as an automated Base64 response data frame.
+
+   -> Static Rule-Based Intelligence: Based on the computed density percentages, localized rules-based logic appends targeted urban planning countermeasures into the structured JSON payload.
