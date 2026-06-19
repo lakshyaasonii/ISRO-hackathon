@@ -2,8 +2,8 @@
 
 An end-to-end full-stack web application designed to analyze urban satellite imagery, calculate land cover estimations, and map thermal heat signatures to mitigate **Urban Heat Islands (UHI)**. Built as a lightweight, lightning-fast microservices system that works seamlessly across desktops and mobile layouts.
 
-Live Deployment Frontend: [Vercel Deployment Link]  
-Live Deployment Backend API: [Render Backend Link]
+Live Deployment Frontend: [https://isro-hackathon-iota.vercel.app/]  
+Live Deployment Backend API: [https://isro-hackathon-6h7q.onrender.com]
 
 ---
 
@@ -51,7 +51,7 @@ Meet the core developers behind **Team EcoScan**! Check out our profiles and ind
 
 ---
 
-# 👤 MEMBER 2: [Mohd KAREEM]
+# 👤 MEMBER 2: [MOHD KAREEM]
 
 ## 🔗 GITHUB PROFILE: [👉 CLICK HERE TO VISIT PROFILE](https://github.com/GitXKareem)
 
@@ -64,7 +64,7 @@ Meet the core developers behind **Team EcoScan**! Check out our profiles and ind
 
 # 👤 MEMBER 3: [MANAS MISHRA]
 
-## 🔗 GITHUB PROFILE: [👉 CLICK HERE TO VISIT PROFILE](https://github.com/member-4-github-link)
+## 🔗 GITHUB PROFILE: [👉 CLICK HERE TO VISIT PROFILE](https://github.com/Manas-123mishra)
 
 * **Core Contributions:**
   * Optimized API JSON payload delivery structures to minimize network latency between frontend and backend.
