@@ -55,3 +55,41 @@ Live Deployment Backend API: [Render Backend Link]
    -> Thermal Gradient Translation: Pillow overlays a localized pseudo-color spectrum filter to transform structural densities into an intuitive visual heat map returned as an automated Base64 response data frame.
 
    -> Static Rule-Based Intelligence: Based on the computed density percentages, localized rules-based logic appends targeted urban planning countermeasures into the structured JSON payload.
+
+---
+
+## 👥 MEET OUR TEAM
+
+Meet the core developers behind **Team EcoScan**! Check out our profiles and individual contributions below:
+
+---
+
+### 👤 MEMBER 1: [ENTER NAME HERE]
+#### 🔗 GITHUB PROFILE: [👉 CLICK HERE TO VISIT PROFILE](https://github.com/your-github-username)
+
+* **Core Contributions:**
+  * Developed the main full-stack framework using **Next.js** and **FastAPI** architectures.
+  * Engineered the pixel-level color segmentation algorithm using **Pillow** to calculate Land Cover logic.
+  * Successfully handled the production pipeline and live hosting deployment across **Vercel** and **Render**.
+
+---
+
+### 👤 MEMBER 2: [ENTER NAME HERE]
+#### 🔗 GITHUB PROFILE: [👉 CLICK HERE TO VISIT PROFILE](https://github.com/member-2-github-link)
+
+* **Core Contributions:**
+  * Implemented the responsive UI grid system using **TailwindCSS** and strict data typing via **TypeScript**.
+  * Designed the thermal pseudo-color gradient matrix using **Pillow** to map extreme heat signatures visually.
+  * Integrated asynchronous file upload middleware using **python-multipart** for handling large satellite graphics.
+
+---
+
+### 👤 MEMBER 3: [ENTER NAME HERE]
+#### 🔗 GITHUB PROFILE: [👉 CLICK HERE TO VISIT PROFILE](https://github.com/member-3-github-link)
+
+* **Core Contributions:**
+  * Programmed the non-blocking internal URL routing routines and backend HTTP client data flows using **HTTPX**.
+  * Configured the static urban planning rules engine to automatically render customized UHI mitigation responses.
+  * Conducted satellite tile data structure analysis, documentation protocols, and system integration verification testing.
+
+---
