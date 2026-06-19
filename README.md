@@ -32,6 +32,58 @@ Live Deployment Backend API: [Render Backend Link]
 
 ---
 
+---
+
+# 👥 MEET OUR TEAM
+
+Meet the core developers behind **Team EcoScan**! Check out our profiles and individual contributions below:
+
+---
+
+# 👤 MEMBER 1: [JATIN JADAUN]
+
+## 🔗 GITHUB PROFILE: [👉 CLICK HERE TO VISIT PROFILE](https://github.com/amssre16256-stack)
+
+* **Core Contributions:**
+  * Developed the main full-stack framework using **Next.js** and **FastAPI** architectures.
+  * Engineered the pixel-level color segmentation algorithm using **Pillow** to calculate Land Cover logic.
+  * Successfully handled the production pipeline and live hosting deployment across **Vercel** and **Render**.
+
+---
+
+# 👤 MEMBER 2: [Mohd KAREEM]
+
+## 🔗 GITHUB PROFILE: [👉 CLICK HERE TO VISIT PROFILE](https://github.com/GitXKareem)
+
+* **Core Contributions:**
+  * Implemented the responsive UI grid system using **TailwindCSS** and strict data typing via **TypeScript**.
+  * Designed the thermal pseudo-color gradient matrix using **Pillow** to map extreme heat signatures visually.
+  * Integrated asynchronous file upload middleware using **python-multipart** for handling large satellite graphics.
+
+---
+
+# 👤 MEMBER 3: [MANAS MISHRA]
+
+## 🔗 GITHUB PROFILE: [👉 CLICK HERE TO VISIT PROFILE](https://github.com/member-4-github-link)
+
+* **Core Contributions:**
+  * Optimized API JSON payload delivery structures to minimize network latency between frontend and backend.
+  * Created data preprocessing protocols for scaling and standardizing multi-spectral satellite imagery assets.
+  * Conducted system-wide performance benchmarking and assisted in cross-platform layout optimization for tablet devices.
+
+---
+
+# 👤 MEMBER 4: [LAKSHYA SONI]
+
+## 🔗 GITHUB PROFILE: [👉 CLICK HERE TO VISIT PROFILE](https://github.com/lakshyaasonii)
+
+* **Core Contributions:**
+  * Programmed the non-blocking internal URL routing routines and backend HTTP client data flows using **HTTPX**.
+  * Configured the static urban planning rules engine to automatically render customized UHI mitigation responses.
+  * Conducted satellite tile data structure analysis, documentation protocols, and system integration verification testing.
+
+---
+
 ## 📁 Repository Structure
 
 ```text
