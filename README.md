@@ -1,4 +1,4 @@
-# 🌍 Automated Satellite Image Urban Heat Island (UHI) Analytics Dashboard
+# 🌍 Automated Satellite Image Urban Heat Island (UHI) Analytics Dashboard by team 🚀COSMIC CLIMATE CREW🚀
 
 An end-to-end full-stack web application designed to analyze urban satellite imagery, calculate land cover estimations, and map thermal heat signatures to mitigate **Urban Heat Islands (UHI)**. Built as a lightweight, lightning-fast microservices system that works seamlessly across desktops and mobile layouts.
 
@@ -36,7 +36,7 @@ Live Deployment Backend API: [https://isro-hackathon-6h7q.onrender.com]
 
 # 👥 MEET OUR TEAM
 
-Meet the core developers behind **Team EcoScan**! Check out our profiles and individual contributions below:
+Meet the core developers behind **🚀COSMIC CLIMATE CREW🚀**! Check out our profiles and individual contributions below:
 
 ---
 
